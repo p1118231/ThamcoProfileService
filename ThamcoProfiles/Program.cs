@@ -9,6 +9,16 @@ using System.Net;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Polly;
+using Polly.Extensions.Http;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using ThamcoProfiles.Services.ProductRepo;
+using Microsoft.Extensions.Http;
+using System;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +26,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient();  // Register HttpClient for DI
+
+builder.Services.AddScoped<IProductService, ProductService>();
 // Configure the HTTP request pipeline.
 builder.Services.ConfigureSameSiteNoneCookies();
 
@@ -55,7 +70,22 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         }
     };
-});    
+});  
+
+builder.Services.AddAuthorization();
+builder.Logging.AddConsole();
+
+if(builder.Environment.IsDevelopment()){
+   // builder.Services.AddSingleton<IProductService, FakeProductService>();
+    
+}
+else {
+
+   builder.Services.AddHttpClient<IProductService, ProductService>();
+                    //.AddPolicyHandler(GetRetryPolicy())
+                  //  .AddPolicyHandler(GetCircuitBreakerPolicy());
+    
+}
 
 var app = builder.Build();
 
@@ -81,3 +111,20 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+/*
+IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+        .WaitAndRetryAsync(5, retryAttempt =>
+            TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
+
+IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30));
+}*/
