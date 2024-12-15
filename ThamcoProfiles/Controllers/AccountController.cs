@@ -7,16 +7,46 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThamcoProfiles.Data;
 using ThamcoProfiles.Models;
+using Auth0.AuthenticationApi;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using Auth0.AuthenticationApi.Models;
+using ThamcoProfiles.Support;
+using Microsoft.AspNetCore.Authorization;
+using SQLitePCL;
+using Microsoft.Extensions.Configuration;
+using BCrypt.Net;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 namespace ThamcoProfiles.Controllers
 {
     public class AccountController : Controller
     {
         private readonly AccountContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(AccountContext context)
+        public AccountController(AccountContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+        }
+
+        //enable auth0 login
+        public IActionResult Login()
+        {
+        return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "Auth0");
+        }
+
+        //logout logic 
+        public async Task Logout()
+        {
+        await HttpContext.SignOutAsync("Auth0");
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // Redirect to Home page or Login page after logout
         }
 
         // GET: Account

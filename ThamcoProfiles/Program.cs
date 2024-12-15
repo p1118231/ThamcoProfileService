@@ -24,6 +24,7 @@ using ThamcoProfiles.Data;
 
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 /*builder.Services.AddDbContext<AccountContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AccountContext") ?? throw new InvalidOperationException("Connection string 'AccountContext' not found.")));
@@ -128,6 +129,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

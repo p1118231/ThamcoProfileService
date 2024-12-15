@@ -59,6 +59,14 @@ public class HomeController : Controller
             return View(products);
     }
 
+    public async Task<IActionResult> Search(string query)
+        {
+            var allProducts = await _productService.GetProductsAsync();
+            var filteredProducts = allProducts.Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+            
+            return View("Index", filteredProducts); // Return filtered products to the Index view
+        }
+
     public IActionResult Privacy()
     {
         return View();

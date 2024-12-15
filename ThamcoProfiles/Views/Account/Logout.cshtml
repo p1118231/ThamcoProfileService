@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Welcome, @ViewData["UserName"]</p>
+<p>Email: @ViewData["UserEmail"]</p>
+
+<!-- Logout Button with JavaScript Confirmation -->
+<button id="logoutButton" class="btn btn-danger">Logout</button>
+
+<!-- JavaScript for Confirmation -->
+<script>
+    document.getElementById("logoutButton").onclick = function () {
+        var result = confirm("Are you sure you want to log out?");
+        if (result) {
+            window.location.href = '@Url.Action("Logout", "Account")'; // Redirects to the logout action
+        }
+    };
+</script>

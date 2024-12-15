@@ -18,7 +18,7 @@ public class ProductService : IProductService
             
             var baseUrl = _configuration["WebServices:ProductService:ProductURL"] ?? "";
             client.BaseAddress = new System.Uri(baseUrl);
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(20);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             _client = client;
         }
