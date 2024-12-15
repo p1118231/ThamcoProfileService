@@ -19,12 +19,41 @@ using System.Security.Claims;
 using ThamcoProfiles.Services.ProductRepo;
 using Microsoft.Extensions.Http;
 using System;
+using Microsoft.EntityFrameworkCore;
+using ThamcoProfiles.Data;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+/*builder.Services.AddDbContext<AccountContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("AccountContext") ?? throw new InvalidOperationException("Connection string 'AccountContext' not found.")));
+*/
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AccountContext>(options =>
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        var folder = Environment.SpecialFolder.LocalApplicationData;
+        var path = Environment.GetFolderPath(folder);
+        var dbPath = System.IO.Path.Join(path, "account.db");
+        options.UseSqlite($"Data Source={dbPath}");
+        options.EnableDetailedErrors();
+        options.EnableSensitiveDataLogging();
+    }
+    else
+    {
+         var cs = builder.Configuration.GetConnectionString("AccountContext");
+        options.UseSqlServer(cs, sqlServerOptionsAction: sqlOptions =>
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(6),
+                errorNumbersToAdd: null
+            )
+        );
+    }
+});
 
 
 builder.Services.AddEndpointsApiExplorer();

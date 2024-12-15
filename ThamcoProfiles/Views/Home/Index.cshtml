@@ -5,40 +5,34 @@
     ViewData["Title"] = "Product list";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/products.css" asp-append-version="true" />
+</head>
+<body>
+    
+
 <h1>Products</h1>
 
 @if (Model != null && Model.Any())
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Category Name</th>
-                <th>Brand Name</th>
-                <th>Description</th>
-                <th>Price</th>
-
-                
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <td>@product.Name</td>
-                    <td>@product.CategoryName</td>
-                    <td>@product.BrandName</td>
-                    <td>@product.Description</td>
-                    <td>@product.Price</td>
-                    
-
-                    
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card-container">
+        @foreach (var product in Model)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$@product.Price</span>
+                    <button> Add to Basket</button>
+                </div>
+            </div>
+        }
+    </div>
 }
 else
 {
     <p>No products available.</p>
 }
+</body>
