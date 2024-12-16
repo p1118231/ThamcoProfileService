@@ -19,6 +19,8 @@ using BCrypt.Net;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ThamcoProfiles.Services.ProfileRepo;
+using System.Security.AccessControl;
 
 
 namespace ThamcoProfiles.Controllers
@@ -28,10 +30,13 @@ namespace ThamcoProfiles.Controllers
         private readonly AccountContext _context;
         private readonly IConfiguration _configuration;
 
-        public AccountController(AccountContext context, IConfiguration configuration)
+        private readonly IProfileService _profileService;
+
+        public AccountController(AccountContext context, IConfiguration configuration, IProfileService profileService)
         {
             _context = context;
             _configuration = configuration;
+            _profileService = profileService;
         }
 
         //enable auth0 login
@@ -49,22 +54,33 @@ namespace ThamcoProfiles.Controllers
         // Redirect to Home page or Login page after logout
         }
 
-        // GET: Account
-        public async Task<IActionResult> Index()
+        
+        [Authorize]
+        
+        public async Task<IActionResult> Details()
         {
-            return View(await _context.User.ToListAsync());
-        }
+            
+            // Get the Auth0UserId from the logged-in user
+            var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
+            var userEmail = Auth0UserHelper.GetEmail(User);
 
-        // GET: Account/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+            var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
+
+            if(user==null){
+
+                    user = new User
+                    {
+                        Email = userEmail,
+                        Auth0UserId = auth0UserId,
+                        Password = BCrypt.Net.BCrypt.HashPassword("Auth0PasswordSetHere"), // You can handle password reset with Auth0
+                    };
+
+                    await _profileService.AddUserAsync(user);
+                    await _profileService.SaveChangesAsync();
+
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (user == null)
             {
                 return NotFound();
@@ -73,89 +89,94 @@ namespace ThamcoProfiles.Controllers
             return View(user);
         }
 
-        // GET: Account/Create
-        public IActionResult Create()
+         [HttpGet]
+        public async Task<IActionResult> EditField(string field)
         {
-            return View();
-        }
 
-        // POST: Account/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PaymentAddress,Password,PhoneNumber,Auth0UserId")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
+            var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
 
-        // GET: Account/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
+            
 
-            var user = await _context.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Field = field;
+            ViewBag.FieldValue = field switch
+            {
+                "FirstName" => user.FirstName ?? string.Empty, // Use empty string if null
+                "LastName" => user.LastName ?? string.Empty,
+                "PhoneNumber" => user.PhoneNumber ?? string.Empty,
+                "PaymentAddress" => user.PaymentAddress ?? string.Empty,
+                _ => throw new Exception("Invalid field.")
+            };
+
             return View(user);
         }
 
-        // POST: Account/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,PaymentAddress,Password,PhoneNumber,Auth0UserId")] User user)
+        public async Task<IActionResult> EditField( string field, string newValue)
         {
-            if (id != user.Id)
+
+            var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
+
+            var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
+            
+            
+            if (user == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                // Local update
+                switch (field)
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    case "FirstName":
+                        user.FirstName = newValue;
+                        break;
+                    case "LastName":
+                        user.LastName = newValue;
+                        break;
+                    
+                
+                    case "PaymentAddress":
+                        user.PaymentAddress = newValue;
+                        break;
+                    case "PhoneNumber":
+                        user.PhoneNumber = newValue;
+                        break;
+                    default:
+                        throw new Exception("Invalid field.");
+
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                
+                 // Save local changes
+                await _profileService.UpdateUser(user);
+                await _profileService.SaveChangesAsync();
             }
-            return View(user);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Error updating {field}: {ex.Message}");
+                return View(user);
+            }
+
+            return RedirectToAction(nameof(Details));
         }
 
-        // GET: Account/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+       
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.Id == id);
+         // GET: Account/Delete/5
+        public async Task<IActionResult> Delete()
+        {
+            var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
+
+            var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
+
             if (user == null)
             {
                 return NotFound();
@@ -169,19 +190,22 @@ namespace ThamcoProfiles.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
-            if (user != null)
+            var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
+
+            var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
+           /* if (user != null)
             {
                 _context.User.Remove(user);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            */
+            return RedirectToAction(nameof(Logout));
         }
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return _profileService.UserExists(id);
         }
     }
 }

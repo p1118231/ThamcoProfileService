@@ -4,57 +4,60 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.Email</h1>
+<h1>@Model.Id</h1>
+<h1>@Model.Auth0UserId</h1>
 
+
+<div class="container">
+    
+    <table class="table">
+        <tr>
+            <th>First Name</th>
+            <td>@Model.FirstName</td>
+            <td>
+                <a asp-action="EditField" asp-route-field="FirstName" class="btn btn-primary btn-sm">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>@Model.LastName</td>
+            <td>
+                <a asp-action="EditField"  asp-route-field="LastName" class="btn btn-primary btn-sm">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        
+       
+        <tr>
+            <th>Phone Number</th>
+            <td>@Model.PhoneNumber</td>
+            <td>
+                <a asp-action="EditField"  asp-route-field="PhoneNumber" class="btn btn-primary btn-sm">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <th>Payment Address</th>
+            <td>@Model.PaymentAddress</td>
+            <td>
+                <a asp-action="EditField" asp-route-field="PaymentAddress" class="btn btn-primary btn-sm">
+                    Edit
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+       
 <div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaymentAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaymentAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Auth0UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Auth0UserId)
-        </dd>
-    </dl>
+    <a asp-controller="Account" asp-action="Request Delete">Delete</a>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Home" asp-action="Index">Home</a>
 </div>

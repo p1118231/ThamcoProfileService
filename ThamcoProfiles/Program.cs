@@ -21,6 +21,7 @@ using Microsoft.Extensions.Http;
 using System;
 using Microsoft.EntityFrameworkCore;
 using ThamcoProfiles.Data;
+using ThamcoProfiles.Services.ProfileRepo;
 
 
 
@@ -61,6 +62,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();  // Register HttpClient for DI
 
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped<IProfileService, ProfileService>();
 // Configure the HTTP request pipeline.
 builder.Services.ConfigureSameSiteNoneCookies();
 

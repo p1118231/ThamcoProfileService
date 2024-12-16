@@ -27,5 +27,7 @@ namespace ThamcoProfiles.Support
         {
             return user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
         }
+
+        
     }
 }
