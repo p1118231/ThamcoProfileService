@@ -1,5 +1,13 @@
 @model ThamcoProfiles.Models.User
+@{
+    ViewData["Title"] = "Edit Field";
+    ViewData["ControllerName"] = "Account";
+    ViewData["ActionName"] = "EditField";
+}
 
+<link href="~/css/edit.css" rel="stylesheet" />
+
+<body>
 <div class="container">
     <h2>Edit your @ViewBag.Field</h2>
     <form id="editForm" asp-action="EditField">
@@ -32,8 +40,8 @@
 
             }
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-controller="Account" asp-action="Details" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="save-button">Save</button>
+        <a asp-controller="Account" asp-action="Details" class="cancel-button">Cancel</a>
     </form>
 </div>
 
@@ -41,6 +49,7 @@
 <div>
     <a asp-controller="Account" asp-action="Details">Back to Details</a>
 </div>
+</body>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTCZn2kPp1MNnuohuihlYuk83f76EHMG8&libraries=places"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
