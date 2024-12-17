@@ -3,17 +3,54 @@
 /* Card Header Styling */
 
 body{
+    background-color:#1e3d58;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure the body takes at least the full height of the viewport */
+    margin: 0;
+}
+
+
+.card{
+    border: none;
+    border-radius: 15px;
 }
 .card-header {
-    background-color: #f8f9fa;
+    background-color: #d0d9e2;
     border-bottom: 1px solid #ddd;
+}
+
+.card-header h3, h4{
+    color:#1e3d58;
+}
+.card-body{
+    background-color: aliceblue;
+}
+.card-col{
+    border: none;
+    border-radius: 15px;
 }
 
 /* Table header styling */
 .table th {
     font-weight: bold;
     color: #495057;
+}
+
+
+
+.btn-secondary{
+    background-color: #d0d9e2;
+    border-radius: 20px;
+    color:#1e3d58;
+    border:none;
+}
+.btn-danger{
+    background-color: #6d0404;
+    color: white;
+    border: none;;
 }
 
 /* Edit Button Hover Effect */
@@ -30,15 +67,10 @@ body{
 
 /* Back to Home Button Hover Effect */
 .btn-secondary:hover {
-    background-color: #6c757d;
+    background-color: #222832;
     color: white;
 }
 
-/* General Card Styling */
-.card {
-    border: 1px solid #ddd;
-    border-radius: 15px;
-}
 
 /* Large Button */
 .btn-lg {
@@ -49,8 +81,37 @@ body{
 
 /* Small Button */
 .btn-sm {
+    color: #1b2025;
+    border-color: #596f86;
     font-size: 0.875rem;
     padding: 0.375rem 1rem;
     border-radius: 30px;
 }
+
+/* Styling for the user info list */
+.user-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between the list items */
+}
+
+.user-info-item {
+    background-color: transparent; /* Ensures transparent background */
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Optional: Adds a subtle border for separation */
+    display: flex;
+    justify-content: space-between; /* Places the "Edit" button to the right */
+    align-items: center;
+}
+
+/* Styling for the Edit buttons */
+.user-info-item .btn {
+    margin-left: 15px; /* Adds space between the text and the button */
+}
+
+/* Optional: Adds hover effect for the items */
+.user-info-item:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* Light background color on hover */
+}
+
 

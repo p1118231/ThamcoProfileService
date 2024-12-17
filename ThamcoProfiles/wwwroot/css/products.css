@@ -6,7 +6,12 @@ h1{
     text-align: center;
 }
 
+body{
+    background-color:cadetblue ;
+}
+
 .card-container {
+    
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
     gap: 20px;
@@ -14,11 +19,11 @@ h1{
 }
 
 .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    
+    border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color:aliceblue;
     transition: transform 0.2s;
 }
 
@@ -57,17 +62,23 @@ h1{
 }
 
 .card-footer .btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
+   /* padding: 8px 12px;*/
     border-radius: 4px;
     cursor: pointer;
     text-decoration: none;
 }
 
-.card-footer .btn:hover {
-    background-color: #0056b3;
+
+
+.basket-button{
+    background-color: #1e3d58;
+    border-radius: 20px;
+    color: aliceblue;
+    border: none;
+}
+
+.basket-button:hover{
+    background-color: #000;
 }
 
 /* Responsiveness: Adjust grid for smaller screens */

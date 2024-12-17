@@ -21,7 +21,7 @@
             Context.Request.RouteValues["action"]?.ToString() == "Delete")))
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                         <i class="bi bi-house-door"></i>
@@ -41,8 +41,14 @@
                         <ul class="navbar-nav ms-auto">
                             @if (User.Identity != null && User.Identity.IsAuthenticated)
                             {
+                               <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="Home">
+                                        <i class="bi bi-basket"></i>
+                                    </a>
+                                </li>
+
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="userProfileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link text-dark" href="#" id="userProfileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userProfileDropdown">
@@ -54,7 +60,7 @@
                             }
                             else
                             {
-                                <a class="nav-link text-dark btn btn-primary" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
+                                <a class="signin-btn nav-link text-dark btn btn-primary" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
                             }
                         </ul>
                     </div>

@@ -23,7 +23,7 @@ public class ProductService : IProductService
             _client = client;
         }
 
-        private async Task<string> GetAccessTokenAsync()
+        public virtual async Task<string> GetAccessTokenAsync()
         {
         var tokenUrl = _configuration["WebServices:Auth0:TokenUrl"];
         var clientId = _configuration["WebServices:Auth0:ClientId"];

@@ -13,60 +13,44 @@
 
 <body>
     
-
-
 <div class="container mt-5">
-    <div class="row">
+    <div class="row justify-content-center">
         <!-- Left Column: User Information -->
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-header text-center">
-                    <h3 class="card-title">User Profile</h3>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Email: <span class="text-muted">@Model.Email</span></h5>
-                    <h6 class="card-subtitle mb-2 text-muted">User ID: @Model.Id</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Auth0 ID: @Model.Auth0UserId</h6>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Right Column: User Details Table -->
-        <div class="col-md-8">
+        <div class="card-col col-md-8">
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <h4 class="mb-0">Personal Information</h4>
+                    <h4 class="mb-0">@Model.Email</h4>
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped">
-                        <tr>
-                            <th>First Name</th>
-                            <td>@Model.FirstName</td>
-                            <td><a asp-action="EditField" asp-route-field="FirstName" class="btn btn-outline-primary btn-sm">Edit</a></td>
-                        </tr>
-                        <tr>
-                            <th>Last Name</th>
-                            <td>@Model.LastName</td>
-                            <td><a asp-action="EditField" asp-route-field="LastName" class="btn btn-outline-primary btn-sm">Edit</a></td>
-                        </tr>
-                        <tr>
-                            <th>Phone Number</th>
-                            <td>@Model.PhoneNumber</td>
-                            <td><a asp-action="EditField" asp-route-field="PhoneNumber" class="btn btn-outline-primary btn-sm">Edit</a></td>
-                        </tr>
-                        <tr>
-                            <th>Payment Address</th>
-                            <td>@Model.PaymentAddress</td>
-                            <td><a asp-action="EditField" asp-route-field="PaymentAddress" class="btn btn-outline-primary btn-sm">Edit</a></td>
-                        </tr>
-                    </table>
+                    <div class="user-info-list">
+                        <div class="user-info-item">
+                            <strong>First Name:</strong> <span>@Model.FirstName</span>
+                            <a asp-action="EditField" asp-route-field="FirstName" class="btn btn-outline-primary btn-sm float-end">Edit</a>
+                        </div>
+                        <div class="user-info-item">
+                            <strong>Last Name:</strong> <span>@Model.LastName</span>
+                            <a asp-action="EditField" asp-route-field="LastName" class="btn btn-outline-primary btn-sm float-end">Edit</a>
+                        </div>
+                        <div class="user-info-item">
+                            <strong>Phone Number:</strong> <span>@Model.PhoneNumber</span>
+                            <a asp-action="EditField" asp-route-field="PhoneNumber" class="btn btn-outline-primary btn-sm float-end">Edit</a>
+                        </div>
+                        <div class="user-info-item">
+                            <strong>Payment Address:</strong> <span>@Model.PaymentAddress</span>
+                            <a asp-action="EditField" asp-route-field="PaymentAddress" class="btn btn-outline-primary btn-sm float-end">Edit</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Buttons Section -->
             <div class="d-flex justify-content-between">
-                <a asp-controller="Account" asp-action="Delete" class="btn btn-danger btn-lg">Delete Account</a>
                 <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg">Back to Home</a>
+                <a asp-controller="Account" asp-action="Delete" class="btn btn-danger btn-lg">Delete Account</a>
+                
             </div>
         </div>
     </div>

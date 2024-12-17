@@ -29,3 +29,69 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.navbar{
+  background-color: #1e3d58;
+}
+
+/* Center the search bar */
+.navbar .d-flex {
+  color: #f8f9fa;
+  border-radius: 20px;
+  width: auto;
+  justify-content: center; /* Center the form horizontally */
+}
+
+.navbar .d-flex .form-control {
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important; /* Optional: adds a subtle border */
+  color: white !important; /* Text color */
+  border-radius: 20px;
+}
+
+
+
+/* Make the icons light so they are visible on dark background */
+.navbar .bi {
+  color: white !important;
+}
+
+/* Change the color of the text in the navbar */
+.navbar-nav .nav-link {
+  color: white !important;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #f8f9fa !important; /* Light hover color */
+}
+
+/* Adjust the search button color */
+.navbar .btn-outline-success {
+  color: white !important;
+  border-color: white !important;
+}
+
+.navbar .btn-outline-success:hover {
+  background-color: #495057 !important;
+  color: white !important;
+}
+
+.btn{
+  border-radius: 20px;
+}
+
+.navbar .d-flex .form-control::placeholder {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7) !important; /* Light placeholder text */
+}
+
+.signin-btn{
+  background-color: cadetblue;
+  color: black;
+  border-radius: 20px;
+  padding: 8px 12px;
+}
+
+.signin-btn:hover{
+  background-color: #1e3d58;
+}

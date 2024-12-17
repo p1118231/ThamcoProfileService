@@ -11,7 +11,7 @@
 <body>
     
 
-<h1>Products</h1>
+<h1>THAMCO</h1>
 
 @if (Model != null && Model.Any())
 {
@@ -25,7 +25,10 @@
                 </div>
                 <div class="card-footer">
                     <span class="price">$@product.Price</span>
-                    <button> Add to Basket</button>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <button class="basket-button"> Add to Basket</button>
+                    }
                 </div>
             </div>
         }
