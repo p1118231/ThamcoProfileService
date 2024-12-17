@@ -10,7 +10,7 @@ using ThamcoProfiles.Data;
 namespace ThamcoProfiles.Data.Migrations
 {
     [DbContext(typeof(AccountContext))]
-    [Migration("20241215001132_AddUsers")]
+    [Migration("20241217193218_AddUsers")]
     partial class AddUsers
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace ThamcoProfiles.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Auth0UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Email")
                         .IsRequired()

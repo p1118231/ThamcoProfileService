@@ -23,7 +23,7 @@ namespace ThamcoProfiles.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Auth0UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Email")
                         .IsRequired()

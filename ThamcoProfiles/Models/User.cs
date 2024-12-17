@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ThamcoProfiles.Models;
 
@@ -38,6 +39,6 @@ public class User{
     [Display (Name = "Phone Number")]
     public String? PhoneNumber { get; set; }
 
-
+    [Column(TypeName = "nvarchar(255)")]
     public String? Auth0UserId { get; set; }
 }

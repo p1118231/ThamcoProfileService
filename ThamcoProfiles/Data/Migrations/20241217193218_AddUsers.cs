@@ -22,7 +22,7 @@ namespace ThamcoProfiles.Data.Migrations
                     PaymentAddress = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
                     Password = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    Auth0UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    Auth0UserId = table.Column<string>(type: "nvarchar(255)", nullable: true)
                 },
                 constraints: table =>
                 {
