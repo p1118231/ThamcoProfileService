@@ -22,17 +22,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using ThamcoProfiles.Data;
 using ThamcoProfiles.Services.ProfileRepo;
+using Microsoft.AspNetCore.Authentication;
 
 
 
 
 var builder = WebApplication.CreateBuilder(args);
-/*builder.Services.AddDbContext<AccountContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("AccountContext") ?? throw new InvalidOperationException("Connection string 'AccountContext' not found.")));
-*/
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//add the database
 builder.Services.AddDbContext<AccountContext>(options =>
 {
     if (builder.Environment.IsDevelopment())
@@ -61,9 +61,14 @@ builder.Services.AddDbContext<AccountContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();  // Register HttpClient for DI
 
+
+
+//add services
+
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
+
 // Configure the HTTP request pipeline.
 builder.Services.ConfigureSameSiteNoneCookies();
 
@@ -108,19 +113,30 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Logging.AddConsole();
 
+/*
 if(builder.Environment.IsDevelopment()){
-   // builder.Services.AddSingleton<IProductService, FakeProductService>();
+    builder.Services.AddSingleton<IProductService, FakeProductService>();
     
 }
 else {
 
-   builder.Services.AddHttpClient<IProductService, ProductService>();
-                    //.AddPolicyHandler(GetRetryPolicy())
-                  //  .AddPolicyHandler(GetCircuitBreakerPolicy());
+   builder.Services.AddHttpClient<IProductService, ProductService>()
+                    .AddPolicyHandler(GetRetryPolicy())
+                    .AddPolicyHandler(GetCircuitBreakerPolicy());
     
 }
+*/
 
 var app = builder.Build();
+
+// Middleware to clear cookies on app start
+app.Use(async (context, next) =>
+{
+    // Clear cookies when the app starts, this ensures no user is logged in when the app restarts.
+    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    
+    await next.Invoke();
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -146,6 +162,7 @@ app.MapControllerRoute(
 
 
 app.Run();
+
 
 /*
 IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
