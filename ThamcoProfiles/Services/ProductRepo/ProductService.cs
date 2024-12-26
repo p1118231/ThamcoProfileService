@@ -52,6 +52,7 @@ public class ProductService : IProductService
 
         public async Task<IEnumerable<ProductDto>> GetProductsAsync()
         {
+            try{
             var uri = "api/product/Undercutters";
             var accessToken = await GetAccessTokenAsync();
 
@@ -61,5 +62,27 @@ public class ProductService : IProductService
             response.EnsureSuccessStatusCode();
             var products = await response.Content.ReadAsAsync<IEnumerable<ProductDto>>();
             return products;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                // Log the error or handle specific HttpRequestException (e.g., network issues)
+                Console.WriteLine($"HttpRequestException occurred: {httpEx.Message}");
+                // Return an empty list or rethrow as needed
+                return Enumerable.Empty<ProductDto>();
+            }
+            catch (TaskCanceledException taskEx)
+            {
+                // Handle timeout-related exceptions (if any)
+                Console.WriteLine($"Task was canceled: {taskEx.Message}");
+                // Return an empty list or handle timeout accordingly
+                return Enumerable.Empty<ProductDto>();
+            }
+            catch (Exception ex)
+            {
+                // Handle other general exceptions
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                // Return an empty list or handle the exception in some other way
+                return Enumerable.Empty<ProductDto>();
+            }
         }
 }
