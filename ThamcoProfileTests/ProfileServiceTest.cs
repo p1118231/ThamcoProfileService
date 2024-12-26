@@ -11,8 +11,8 @@ namespace ThamcoProfileTests
     [TestClass]
     public class ProfileServiceTests
     {
-        private ProfileService _profileService;
-        private AccountContext _context;
+        public required  ProfileService _profileService;
+        public required AccountContext _context;
 
         [TestInitialize]
         public void Setup()

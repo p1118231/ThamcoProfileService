@@ -11,24 +11,25 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace ThamcoProfileTests
 {
     [TestClass]
     public class AccountControllerTests
     {
-        private Mock<IProfileService> _mockProfileService;
-        private Mock<IConfiguration> _mockConfiguration;
-        private AccountController _controller;
+        public required  Mock<IProfileService> _mockProfileService;
+        public  required Mock<IConfiguration> _mockConfiguration;
+        public  required Mock<ILogger<AccountController>> _mockLogger;
+        public required AccountController _controller;
 
         [TestInitialize]
         public void Setup()
         {
             _mockProfileService = new Mock<IProfileService>();
             _mockConfiguration = new Mock<IConfiguration>();
-
-            // Initialize the controller with mocked dependencies
-            _controller = new AccountController(null, _mockConfiguration.Object, _mockProfileService.Object);
+            _mockLogger = new Mock<ILogger<AccountController>>();
+            _controller = new AccountController( _mockConfiguration.Object, _mockProfileService.Object, _mockLogger.Object);
         }
 
         [TestMethod]

@@ -21,44 +21,64 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ThamcoProfiles.Services.ProfileRepo;
 using System.Security.AccessControl;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 
 namespace ThamcoProfiles.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AccountContext _context;
+       // private readonly AccountContext _context;
         private readonly IConfiguration _configuration;
 
         private readonly IProfileService _profileService;
 
-        public AccountController(AccountContext context, IConfiguration configuration, IProfileService profileService)
+        private readonly ILogger<AccountController> _logger;
+
+        public AccountController( IConfiguration configuration, IProfileService profileService, ILogger<AccountController> logger)
         {
-            _context = context;
+            
             _configuration = configuration;
             _profileService = profileService;
+            _logger = logger;
         }
 
-        //enable auth0 login
+        // Enable Auth0 login
         public IActionResult Login()
         {
-        return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "Auth0");
+            try
+            {
+                return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "Auth0");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in Login: {ex.Message}");
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
         }
-
-        //logout logic 
+        // Logout logic
         public async Task Logout()
         {
-        await HttpContext.SignOutAsync("Auth0");
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            try
+            {
+                await HttpContext.SignOutAsync("Auth0");
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in Logout: {ex.Message}");
+            }
 
-        // Redirect to Home page or Login page after logout
+            // Redirect to Home page or Login page after logout
         }
 
         
         [Authorize]
-        
         public async Task<IActionResult> Details()
         {
+
+            try{
             
             // Get the Auth0UserId from the logged-in user
             var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
@@ -70,16 +90,14 @@ namespace ThamcoProfiles.Controllers
 
                     user = new User
                     {
-                        Email = userEmail,
+                        Email = userEmail ?? "",
                         Auth0UserId = auth0UserId,
                         Password = BCrypt.Net.BCrypt.HashPassword("Auth0PasswordSetHere"), // You can handle password reset with Auth0
                     };
 
                     await _profileService.AddUserAsync(user);
                     await _profileService.SaveChangesAsync();
-
             }
-
 
             if (user == null)
             {
@@ -87,12 +105,23 @@ namespace ThamcoProfiles.Controllers
             }
 
             return View(user);
+            }
+            catch (Exception ex){
+
+                _logger.LogError($"Error in Details: {ex.Message}");
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            
+
+            }
         }
+        
 
          [HttpGet]
         public async Task<IActionResult> EditField(string field)
         {
 
+
+            try{
             var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
 
             var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
@@ -114,13 +143,19 @@ namespace ThamcoProfiles.Controllers
             };
 
             return View(user);
+            }
+            catch(Exception ex){
+                 _logger.LogError($"Error in EditField: {ex.Message}");
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+           
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditField( string field, string newValue)
         {
-
+            
             var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
 
             var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
@@ -190,17 +225,30 @@ namespace ThamcoProfiles.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            try {
             var auth0UserId = Auth0UserHelper.GetAuth0UserId(User);
 
             var user = await _profileService.GetUserByAuth0IdAsync(auth0UserId);
-           /* if (user != null)
+
+            //the user requests to be deleted and the staff approve 
+
+            /*
+           if (user != null)
             {
                 _context.User.Remove(user);
             }
 
             await _context.SaveChangesAsync();
+            
             */
             return RedirectToAction(nameof(Logout));
+            }
+            catch(Exception ex){
+
+                _logger.LogError($"Error deleting user: {ex.Message}");
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+           
+            }
         }
 
         private bool UserExists(int id)

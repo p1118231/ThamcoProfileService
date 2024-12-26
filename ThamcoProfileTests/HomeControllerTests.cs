@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Http;
 [TestClass]
 public class HomeControllerTests
 {
-    private Mock<ILogger<HomeController>> _mockLogger;
-    private Mock<IProductService> _mockProductService;
-    private HomeController _controller;
+    public required Mock<ILogger<HomeController>> _mockLogger;
+    public required Mock<IProductService> _mockProductService;
+    public required HomeController _controller;
 
     [TestInitialize]
     public void Setup()

@@ -60,10 +60,11 @@ public class HomeController : Controller
     }
 
     public async Task<IActionResult> Search(string query)
+    
         {
             ViewBag.Message = "Please enter a search term.";
             var allProducts = await _productService.GetProductsAsync();
-            var filteredProducts = allProducts.Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+            var filteredProducts = allProducts.Where(p => (p.Name??"").Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
             
             return View("Index", filteredProducts); // Return filtered products to the Index view
         }

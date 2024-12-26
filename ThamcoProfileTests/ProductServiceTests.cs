@@ -16,8 +16,8 @@ namespace ThamcoProfileTests
     [TestClass]
     public class ProductServiceTests
     {
-        private Mock<IConfiguration> _mockConfiguration;
-        private ProductService _productService;
+        public required Mock<IConfiguration> _mockConfiguration;
+        public required ProductService _productService;
 
         [TestInitialize]
         public void Setup()

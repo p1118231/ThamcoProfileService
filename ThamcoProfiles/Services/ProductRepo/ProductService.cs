@@ -35,9 +35,9 @@ public class ProductService : IProductService
         var requestBody = new Dictionary<string, string>
         {
             { "grant_type", "client_credentials" },
-            { "client_id", clientId },
-            { "client_secret", clientSecret },
-            { "audience", audience }
+            { "client_id", clientId ?? ""},
+            { "client_secret", clientSecret ?? "" },
+            { "audience", audience ?? "" }
         };
 
         var request = new FormUrlEncodedContent(requestBody);
@@ -47,7 +47,7 @@ public class ProductService : IProductService
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var jsonResponse = System.Text.Json.JsonSerializer.Deserialize<JsonElement>(responseBody);
-        return jsonResponse.GetProperty("access_token").GetString();
+        return jsonResponse.GetProperty("access_token").GetString() ?? string.Empty;
        }
 
         public async Task<IEnumerable<ProductDto>> GetProductsAsync()
