@@ -28,7 +28,7 @@ SQL Server or SQLite
 Auth0 Account
 
 Clone the repository 
--git clone https://github.com/yourusername/thamcoprofiles.git
+-git clone https://github.com/p1118231/ThamcoProfileService.git
 -cd thamcoprofiles
 
 Configuration
