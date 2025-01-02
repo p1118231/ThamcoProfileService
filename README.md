@@ -1,3 +1,4 @@
+P1118231 BENJAMIN SSETTUBA
 ThamcoProfiles MVC
 
 ThamcoProfiles is a web application built with ASP.NET Core MVC, designed to manage user profiles and product data. It integrates with Auth0 for user authentication, uses SQL Server for the database, and makes use of Polly for resilient HTTP calls. The project is structured to support both local development and production environments, with various services for profile management and product data integration.
