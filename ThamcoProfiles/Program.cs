@@ -99,8 +99,8 @@ builder.Logging.AddConsole();
 
 
 if(builder.Environment.IsDevelopment()){
-    //builder.Services.AddSingleton<IProductService, FakeProductService>();
-    builder.Services.AddSingleton<IProductService, ProductService>();
+    builder.Services.AddSingleton<IProductService, FakeProductService>();
+    
 }
 else {
 
