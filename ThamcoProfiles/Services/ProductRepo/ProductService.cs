@@ -22,7 +22,8 @@ public class ProductService : IProductService
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             _client = client;
         }
-
+        
+        // get the products from the product service 
         public virtual async Task<string> GetAccessTokenAsync()
         {
         var tokenUrl = _configuration["WebServices:Auth0:TokenUrl"];

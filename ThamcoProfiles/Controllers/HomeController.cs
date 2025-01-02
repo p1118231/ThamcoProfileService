@@ -18,6 +18,8 @@ public class HomeController : Controller
         _productService = productService;
     }
 
+    //display the products from the product service 
+
     [HttpGet("Products")]
         [Authorize]
         public async Task<IActionResult> Products()
@@ -39,7 +41,7 @@ public class HomeController : Controller
             return View(products);
 
         }
-
+    //display products 
     public async Task<IActionResult> Index()
     {
         IEnumerable<ProductDto> products = null!;
@@ -59,6 +61,8 @@ public class HomeController : Controller
             return View(products);
     }
 
+
+    //search for products 
     public async Task<IActionResult> Search(string query)
     
         {

@@ -1,9 +1,4 @@
-using Auth0.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+
 using ThamcoProfiles.Support;
 using System.Net;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -11,20 +6,11 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Polly;
 using Polly.Extensions.Http;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using ThamcoProfiles.Services.ProductRepo;
-using Microsoft.Extensions.Http;
-using System;
 using Microsoft.EntityFrameworkCore;
 using ThamcoProfiles.Data;
 using ThamcoProfiles.Services.ProfileRepo;
 using Microsoft.AspNetCore.Authentication;
-
-
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,8 +46,6 @@ builder.Services.AddDbContext<AccountContext>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();  // Register HttpClient for DI
-
-
 
 //add services
 
@@ -113,30 +97,25 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Logging.AddConsole();
 
-/*
+
 if(builder.Environment.IsDevelopment()){
-    builder.Services.AddSingleton<IProductService, FakeProductService>();
-    
+    //builder.Services.AddSingleton<IProductService, FakeProductService>();
+    builder.Services.AddSingleton<IProductService, ProductService>();
 }
 else {
 
    builder.Services.AddHttpClient<IProductService, ProductService>()
                     .AddPolicyHandler(GetRetryPolicy())
                     .AddPolicyHandler(GetCircuitBreakerPolicy());
+    builder.Services.AddHttpClient<IProfileService, ProfileService>()
+                    .AddPolicyHandler(GetRetryPolicy())
+                    .AddPolicyHandler(GetCircuitBreakerPolicy());
     
 }
-*/
 
 var app = builder.Build();
 
-// Middleware to clear cookies on app start
-app.Use(async (context, next) =>
-{
-    // Clear cookies when the app starts, this ensures no user is logged in when the app restarts.
-    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    
-    await next.Invoke();
-});
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -164,7 +143,7 @@ app.MapControllerRoute(
 app.Run();
 
 
-/*
+
 IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 {
     return HttpPolicyExtensions
@@ -179,4 +158,4 @@ IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
     return HttpPolicyExtensions
         .HandleTransientHttpError()
         .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30));
-}*/
+}

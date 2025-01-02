@@ -23,6 +23,7 @@ using ThamcoProfiles.Services.ProfileRepo;
 using System.Security.AccessControl;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 
 namespace ThamcoProfiles.Controllers
@@ -64,6 +65,11 @@ namespace ThamcoProfiles.Controllers
             {
                 await HttpContext.SignOutAsync("Auth0");
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+                {
+                    // Redirect to the home page after logout.
+                    RedirectUri = Url.Action("Index", "Home")
+                });
             }
             catch (Exception ex)
             {
@@ -73,7 +79,7 @@ namespace ThamcoProfiles.Controllers
             // Redirect to Home page or Login page after logout
         }
 
-        
+        //profile details
         [Authorize]
         public async Task<IActionResult> Details()
         {
@@ -115,7 +121,7 @@ namespace ThamcoProfiles.Controllers
             }
         }
         
-
+        //editting profiles
          [HttpGet]
         public async Task<IActionResult> EditField(string field)
         {
