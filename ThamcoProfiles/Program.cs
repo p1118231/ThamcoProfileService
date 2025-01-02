@@ -107,9 +107,7 @@ else {
    builder.Services.AddHttpClient<IProductService, ProductService>()
                     .AddPolicyHandler(GetRetryPolicy())
                     .AddPolicyHandler(GetCircuitBreakerPolicy());
-   // builder.Services.AddHttpClient<IProfileService, ProfileService>()
-                //    .AddPolicyHandler(GetRetryPolicy())
-                //    .AddPolicyHandler(GetCircuitBreakerPolicy());
+
     
 }
 
