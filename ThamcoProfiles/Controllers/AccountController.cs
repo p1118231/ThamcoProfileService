@@ -249,17 +249,4 @@ namespace ThamcoProfiles.Controllers
             */
             return RedirectToAction(nameof(Logout));
             }
-            catch(Exception ex){
-
-                _logger.LogError($"Error deleting user: {ex.Message}");
-                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-           
-            }
-        }
-
-        private bool UserExists(int id)
-        {
-            return _profileService.UserExists(id);
-        }
-    }
-}
+            

@@ -83,7 +83,4 @@ public class ProductService : IProductService
                 // Handle other general exceptions
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 // Return an empty list or handle the exception in some other way
-                return Enumerable.Empty<ProductDto>();
-            }
-        }
-}
+                re
