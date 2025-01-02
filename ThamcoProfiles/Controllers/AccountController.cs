@@ -65,11 +65,11 @@ namespace ThamcoProfiles.Controllers
             {
                 await HttpContext.SignOutAsync("Auth0");
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+                /*await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
                 {
                     // Redirect to the home page after logout.
                     RedirectUri = Url.Action("Index", "Home")
-                });
+                });*/
             }
             catch (Exception ex)
             {
